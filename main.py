@@ -1,20 +1,36 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 
+bot_commands = ["СТАРТ", "КОНЕЦ", "ЦИКЛ", "СТОП", "ЗАПУСК", "ПОМОЩЬ"] #команды
 
-# API токен сообщества
-file = open('token.TXT', 'r')
-mytoken=file.read()
+file = open('token.TXT', 'r') #токен
+mytoken = file.read()
 
 # Функция посылающая сообщение
 def write_msg(user_id, message):
     random_id = vk_api.utils.get_random_id()
     vk.method('messages.send', {'user_id': user_id, 'message': message, 'random_id': random_id})
 
-
 # Авторизуемся как сообщество
 vk = vk_api.VkApi(token=mytoken)
 longpoll = VkLongPoll(vk)
+
+#Выбор команды для бота
+def new_message(message):
+    if message.upper() == bot_commands[0]:
+        return f"Здравствуйте! Если Вам нужен список команд, напишите 'помощь'"
+    elif message.upper() == bot_commands[1]:
+        return f"До свидания!"
+    elif message.upper() == bot_commands[2]:
+        return f"Здесь будет цикл"
+    elif message.upper() == bot_commands[3]:
+        return f"Здесь будет остановка таймера"
+    elif message.upper() == bot_commands[4]:
+        return f"Здесь будет запуск таймера"
+    elif message.upper() == bot_commands[5]:
+        return f"Список команд: 'СТАРТ', 'КОНЕЦ', 'ЦИКЛ', 'СТОП', 'ЗАПУСК', 'ПОМОЩЬ'"
+    else:
+        return f"Напишите 'Старт'"
 
 # Основной цикл
 for event in longpoll.listen():
@@ -27,11 +43,4 @@ for event in longpoll.listen():
 
             # Сообщение от пользователя
             request = event.text
-
-            # Логика формирования ответа бота
-            if ('Старт' in request):
-                answer = 'Всё еще не умею('
-            else:
-                answer = 'Если Вы хотите начать, напишите мне "Старт"'
-
-            write_msg(event.user_id, answer)
+            write_msg(event.user_id, new_message(request))
