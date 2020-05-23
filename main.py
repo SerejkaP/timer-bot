@@ -1,9 +1,10 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 
-# API токен сообщества
-mytoken = '93d891c18343c9467352320cbc4507acda2803b120a4324535bf31ac9e16a1ab403b0444027508157e26e'
 
+# API токен сообщества
+file = open('token.TXT', 'r')
+mytoken=file.read()
 
 # Функция посылающая сообщение
 def write_msg(user_id, message):
@@ -19,7 +20,7 @@ longpoll = VkLongPoll(vk)
 for event in longpoll.listen():
 
     # Если пришло новое сообщение
-    if event.type == VkEventType.MESSAGE_NEW:
+    if event.type == VkEventType.MESSAGE_NEW and event.to_me:
 
         # Если оно имеет метку для меня( то есть бота)
         if event.to_me:
@@ -29,7 +30,7 @@ for event in longpoll.listen():
 
             # Логика формирования ответа бота
             if ('Старт' in request):
-                answer = 'Ну, я пока не знаю, что начинать('
+                answer = 'Всё еще не умею('
             else:
                 answer = 'Если Вы хотите начать, напишите мне "Старт"'
 
