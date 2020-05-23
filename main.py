@@ -1,7 +1,7 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
 
-bot_commands = ["СТАРТ", "КОНЕЦ", "ЦИКЛ", "СТОП", "ЗАПУСК", "ПОМОЩЬ"] #команды
+bot_commands = ["СТАРТ", "КОНЕЦ", "ЗАПУСК", "ПОМОЩЬ"] #команды
 
 file = open('token.TXT', 'r') #токен
 mytoken = file.read()
@@ -22,13 +22,9 @@ def new_message(message):
     elif message.upper() == bot_commands[1]:
         return f"До свидания!"
     elif message.upper() == bot_commands[2]:
-        return f"Здесь будет цикл"
-    elif message.upper() == bot_commands[3]:
-        return f"Здесь будет остановка таймера"
-    elif message.upper() == bot_commands[4]:
         return f"Здесь будет запуск таймера"
-    elif message.upper() == bot_commands[5]:
-        return f"Список команд: 'СТАРТ', 'КОНЕЦ', 'ЦИКЛ', 'СТОП', 'ЗАПУСК', 'ПОМОЩЬ'"
+    elif message.upper() == bot_commands[3]:
+        return f"Список команд: 'СТАРТ', 'КОНЕЦ', 'ЗАПУСК', 'ПОМОЩЬ'"
     else:
         return f"Напишите 'Старт'"
 
