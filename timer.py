@@ -23,5 +23,3 @@ def for_sleeping(hour, m):
     listSleeps = [str(listHours[i]) + ":" + str(listMinutes[i]) for i in range(6)]
     stringSleeps = ' '.join(listSleeps)
     return stringSleeps
-
-
