@@ -21,7 +21,7 @@ vk = vk_api.VkApi(token=mytoken)
 longpoll = VkLongPoll(vk)
 
 
-def checker(arg):
+def heartbreaker(arg):
     arrMsg = arg.split()
     return arrMsg, len(arrMsg)
 
@@ -36,31 +36,43 @@ def new_message():
                 # Сообщение от пользователя
                 request = event.text
                 # Обработка сообщения
-                arrMsg, length = checker(request)
+                arrMsg, length = heartbreaker(request)
                 # Ответ на команды ботом
                 if arrMsg[0].upper() == bot_commands[0]:  # Текст для таймера
-                    msg = f"Для запуска таймера напишите 'таймер:', что напомнить и время через двоеточие. (Пример:'таймер: слово 3:2:2')"
+                    msg = f"Для запуска таймера напишите 'таймер:', что напомнить и время через двоеточие. (Пример:'таймер: слово 3:2:2') "
                 elif arrMsg[0].upper() == bot_commands[1]:  # Прощание
                     msg = "До свидания!"
                 elif arrMsg[0].upper() == bot_commands[2]:  # Помощь по командам
                     msg = f'Список команд: "СТАРТ", "КОНЕЦ", "ПОМОЩЬ", "ЦИКЛ", "СОН"'
                 elif arrMsg[0].upper() == bot_commands[3]:  # Текст для таймера-цикла
-                    msg = f"Для запуска таймера  сциклом напишите 'цикл:', что напомнить, время через двоеточие и количество циклов. (Цикл:'таймер: слово 3:2:2 5')"
+                    msg = f"Для запуска таймера  сциклом напишите 'цикл:', что напомнить, время через двоеточие и " \
+                          f"количество циклов. (Цикл:'таймер: слово 3:2:2 5') "
                 elif arrMsg[0].upper() == bot_commands[4]:  # Таймер
-                    argTime = arrMsg[2].split(':')
-                    msg = timer.default_timer(arrMsg[1], int(argTime[0]), int(argTime[1]), int(argTime[2]))
-                elif arrMsg[0].upper() == bot_commands[5]:  # Таймер с циклами
-                    argTime = arrMsg[2].split(':')
-                    num = int(arrMsg[3])
-                    while num > 1:
+                    if timer.checker(request, 0) == 0:
+                        msg = f"Неверная запись"
+                    else:
+                        argTime = arrMsg[2].split(':')
                         msg = timer.default_timer(arrMsg[1], int(argTime[0]), int(argTime[1]), int(argTime[2]))
-                        write_msg(event.user_id, msg)
-                        num -= 1
+                elif arrMsg[0].upper() == bot_commands[5]:  # Таймер с циклами
+                    if timer.checker(request, 1) == 0:
+                        msg = f"Неверная запись"
+                    else:
+                        argTime = arrMsg[2].split(':')
+                        num = int(arrMsg[3])
+                        while num > 1:
+                            msg = timer.default_timer(arrMsg[1], int(argTime[0]), int(argTime[1]), int(argTime[2]))
+                            write_msg(event.user_id, msg)
+                            num -= 1
                 elif arrMsg[0].upper() == bot_commands[6]:  # Текст для подборки времени сна
-                    msg = f"Введите время, когда хотите проснуться. Человеку нужно 14 минут в среднем, чтобы уснуть... (Пример записи: 'Сон: 23:00')"
+                    msg = f"Введите время, когда хотите проснуться. Человеку нужно 14 минут в среднем, " \
+                          f"чтобы уснуть... (Пример записи: 'Сон: 23:00') "
                 elif arrMsg[0].upper() == bot_commands[7]:  # Подбор времени сна
-                    argTime = arrMsg[1].split(':')
-                    msg = "Время, когда лучше уснуть:" + timer.for_sleeping(int(argTime[0]), int(argTime[1])).split(',')
+                    if timer.checker(request, 2) == 0:
+                        msg = f"Неверная запись"
+                    else:
+                        argTime = arrMsg[1].split(':')
+                        time_for_sleep = ''.join(timer.for_sleeping(int(argTime[0]), int(argTime[1])).split(','))
+                        msg = "Время, когда лучше уснуть: " + time_for_sleep
                 else:  # Приветственное сообшение
                     msg = f"Здравствуйте! Если Вам нужен список команд, напишите 'помощь'"
                 write_msg(event.user_id, msg)

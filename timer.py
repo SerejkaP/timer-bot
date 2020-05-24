@@ -27,3 +27,27 @@ def for_sleeping(hour, m):
                   range(6)]  # Заполнение списка отформатированным временем
     stringSleeps = ' '.join(listSleeps)
     return stringSleeps
+
+
+# Проверка записи на правильность
+def checker(arg, function_type):
+    arrMsg = str(arg).split()
+    chk = 0
+    if function_type == 0:  # Для обычного таймера
+        if len(arrMsg) == 3 and len(arrMsg[2].split(':')) == 3:
+            return
+        else:
+            print("ERROR")
+            return chk
+    if function_type == 1:  # Для таймера с циклами
+        if len(arrMsg) == 4 and len(arrMsg[2].split(':')) == 3:
+            return
+        else:
+            print("ERROR")
+            return chk
+    if function_type == 2:  # Для калькулятора сна
+        if len(arrMsg) == 2 and len(arrMsg[1].split(':')) == 2:
+            return
+        else:
+            print("ERROR")
+            return chk
