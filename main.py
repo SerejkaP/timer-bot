@@ -46,7 +46,7 @@ def new_message():
                     msg = f"Для запуска таймера  сциклом напишите 'цикл:', что напомнить, время через двоеточие и количество циклов. (Цикл:'таймер: слово 3:2:2 5')"
                 elif arrMsg[0].upper() == bot_commands[4]:
                     argTime = arrMsg[2].split(':')
-                    msg = "Таймер"
+                    msg = timer.default_timer(arrMsg[1], int(argTime[0]), int(argTime[1]), int(argTime[2]))
                 elif arrMsg[0].upper() == bot_commands[5]:
                     argTime = arrMsg[2].split(':')
                     num = int(arrMsg[3])
