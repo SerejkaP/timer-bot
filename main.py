@@ -58,7 +58,7 @@ def new_message():
                     msg = f"Введите время, когда хотите проснуться. Человеку нужно 14 минут в среднем, чтобы уснуть... (Пример записи: 'Сон: 23:00')"
                 elif arrMsg[0].upper() == bot_commands[7]:
                     argTime = arrMsg[1].split(':')
-                    msg = "Время, когда лучше уснуть:"
+                    msg = "Время, когда лучше уснуть:" + timer.for_sleeping(int(argTime[0]), int(argTime[1])).split(',')
                 else:
                     msg = f"Здравствуйте! Если Вам нужен список команд, напишите 'помощь'"
                 write_msg(event.user_id, msg)
