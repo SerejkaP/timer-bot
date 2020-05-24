@@ -1,9 +1,14 @@
 import vk_api
 from vk_api.longpoll import VkLongPoll, VkEventType
+import timer
 
-bot_commands = ["СТАРТ", "КОНЕЦ", "ЗАПУСК", "ПОМОЩЬ"] #команды
+# команды
+bot_commands = ["СТАРТ", "КОНЕЦ", "ПОМОЩЬ", "ЦИКЛ", "ТАЙМЕР:", "ЦИКЛ:", "СОН", "СОН:"]
 
-file = open('token.TXT', 'r') #токен
+global boolTimer
+
+# Токен
+file = open('token.TXT', 'r')
 mytoken = file.read()
 
 # Функция посылающая сообщение
@@ -15,28 +20,51 @@ def write_msg(user_id, message):
 vk = vk_api.VkApi(token=mytoken)
 longpoll = VkLongPoll(vk)
 
-#Выбор команды для бота
-def new_message(message):
-    if message.upper() == bot_commands[0]:
-        return f"Здравствуйте! Если Вам нужен список команд, напишите 'помощь'"
-    elif message.upper() == bot_commands[1]:
-        return f"До свидания!"
-    elif message.upper() == bot_commands[2]:
-        return f"Здесь будет запуск таймера"
-    elif message.upper() == bot_commands[3]:
-        return f"Список команд: 'СТАРТ', 'КОНЕЦ', 'ЗАПУСК', 'ПОМОЩЬ'"
-    else:
-        return f"Напишите 'Старт'"
+def checker(arg):
+    arrMsg=arg.split()
+    return arrMsg, len(arrMsg)
 
 # Основной цикл
-for event in longpoll.listen():
+def new_message():
+    for event in longpoll.listen():
+        # Если пришло новое сообщение
+        if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+            # Если оно имеет метку для бота
+            if event.to_me:
+                # Сообщение от пользователя
+                request = event.text
+                # Обработка сообщения
+                arrMsg, length = checker(request)
+                # Ответ на команды ботом
+                if arrMsg[0].upper() == bot_commands[0]:
+                    msg = f"Для запуска таймера напишите 'таймер:', что напомнить и время через двоеточие. (Пример:'таймер: слово 3:2:2')"
+                elif arrMsg[0].upper() == bot_commands[1]:
+                    msg = "До свидания!"
+                elif arrMsg[0].upper() == bot_commands[2]:
+                    msg = f"Список команд: 'СТАРТ', 'КОНЕЦ', 'ЗАПУСК', 'ПОМОЩЬ','СТОП', 'СОН', 'ЦИКЛ'"
+                elif arrMsg[0].upper() == bot_commands[3]:
+                    msg = f"Для запуска таймера  сциклом напишите 'цикл:', что напомнить, время через двоеточие и количество циклов. (Цикл:'таймер: слово 3:2:2 5')"
+                elif arrMsg[0].upper() == bot_commands[4]:
+                    argTime = arrMsg[2].split(':')
+                    msg = "Таймер"
+                elif arrMsg[0].upper() == bot_commands[5]:
+                    argTime = arrMsg[2].split(':')
+                    num = int(arrMsg[3])
+                    while num > 1:
+                        msg = "Таймер с циклами"
+                        write_msg(event.user_id, msg)
+                        num -= 1
+                elif arrMsg[0].upper() == bot_commands[6]:
+                    msg = f"Введите время, когда хотите проснуться. Человеку нужно 14 минут в среднем, чтобы уснуть... (Пример записи: 'Сон: 23:00')"
+                elif arrMsg[0].upper() == bot_commands[7]:
+                    argTime = arrMsg[1].split(':')
+                    msg = "Время, когда лучше уснуть:"
+                else:
+                    msg = f"Здравствуйте! Если Вам нужен список команд, напишите 'помощь'"
+                write_msg(event.user_id, msg)
 
-    # Если пришло новое сообщение
-    if event.type == VkEventType.MESSAGE_NEW and event.to_me:
+def main():
+    new_message()
 
-        # Если оно имеет метку для меня( то есть бота)
-        if event.to_me:
-
-            # Сообщение от пользователя
-            request = event.text
-            write_msg(event.user_id, new_message(request))
+if __name__ == '__main__':
+    main()
