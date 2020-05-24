@@ -19,13 +19,23 @@ def for_sleeping(hour, m):
     local_time = h * 60 + m  # Перевод времени в минуты
     listTime = [i * 90 + local_time for i in range(6)]  # Заполнение массива с периодами в полтора часа
     print(listTime)
-    listHours = [listTime[i] // 60 for i in range(6)]  # Подсчёт часов
-    print(listHours)
-    listMinutes = [listTime[i] - listHours[i] * 60 for i in range(6)]  # Подсчёт минут
+    first_listHours = [listTime[i] // 60 for i in range(6)]  # Подсчёт часов
+    print(first_listHours)
+    listMinutes = [listTime[i] - first_listHours[i] * 60 for i in range(6)]  # Подсчёт минут
+    for i in range(6):
+        if listMinutes[i] == 0:
+            listMinutes[i] = "00"
     print(listMinutes)
-    listSleeps = [str(listHours[i]) + ":" + str(listMinutes[i]) for i in
+    second_listHours = first_listHours
+    for i in range(6):
+        if first_listHours[i] > 23:
+            first_listHours[i] -= 24
+        if first_listHours[i] == 0:
+            first_listHours[i] = "00"
+    listSleeps = [str(second_listHours[i]) + ":" + str(listMinutes[i]) for i in
                   range(6)]  # Заполнение списка отформатированным временем
     stringSleeps = ' '.join(listSleeps)
+    print(first_listHours)
     return stringSleeps
 
 
