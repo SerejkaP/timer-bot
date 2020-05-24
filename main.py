@@ -51,7 +51,7 @@ def new_message():
                     argTime = arrMsg[2].split(':')
                     num = int(arrMsg[3])
                     while num > 1:
-                        msg = "Таймер с циклами"
+                        msg = timer.default_timer(arrMsg[1], int(argTime[0]), int(argTime[1]), int(argTime[2]))
                         write_msg(event.user_id, msg)
                         num -= 1
                 elif arrMsg[0].upper() == bot_commands[6]:
