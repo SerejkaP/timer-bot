@@ -59,10 +59,11 @@ def new_message():
                     else:
                         argTime = arrMsg[2].split(':')
                         num = int(arrMsg[3])
-                        while num > 1:
+                        while num > 0:
+                            num -= 1
                             msg = timer.default_timer(arrMsg[1], int(argTime[0]), int(argTime[1]), int(argTime[2]))
                             write_msg(event.user_id, msg)
-                            num -= 1
+                        msg = f"Конец циклов..."
                 elif arrMsg[0].upper() == bot_commands[6]:  # Текст для подборки времени сна
                     msg = f"Введите время, когда хотите проснуться, и я подсчитаю, когда лучше лечь спать. Человеку " \
                           f"нужно 14 минут в среднем, чтобы уснуть... (Пример записи: 'Сон: 23:00') "
